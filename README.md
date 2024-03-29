@@ -6,10 +6,48 @@ Derived from ABB Power One Aurora: Web Interface Module (WIM), see:
   * https://www.pcbway.com/project/shareproject/ABB__Power_One__Aurora_Web_Solar_Inverter_Monitor__WIM___server_PCB.html?from=mischianti723
 
 * TODO
-  - Get PCB
-  - Get LiPo Cell and socket
-  - Get model and build Case
-  - Get regulator: LD1117V33, (78xxl package)
+  - Model and print Case
+  - 
+
+## Software
+
+* how to install
+  - build from ino file on github
+    * ????
+  - upload pre-built bin file from github
+    * ????
+
+## Protocol
+
+* link
+  - 19200 baud, 1 stop bit, no parity
+* command message
+  - fixed length: 8B + 2B (checksum)
+    * 0: address
+      - value between 2 and 63
+      - normally is set to '2'
+      - defined in inverter's menu
+    * 1: command
+    * [2-7]: data bytes (B2-B7)
+    * 8: CRC_L
+    * 9: CRC_H
+* response message
+  - fixed length: 6B + 2B (checksum)
+    * 0: transmission state
+      - 0: ok
+      - 51: unimplemented Command
+      - 52: variable doesn't exist
+      - 53: variable value out of range
+      - 54: EEprom not accessible
+      - 55: Service Mode not toggled
+      - 56: cannot send Command to internal controller
+      - 57: Command not executed
+      - 58: variable is not available, retry
+    * 1: global state (state of the addressed device)
+      - ?
+    * [2-5]: data bytes (B2-B5)
+    * 6: CRC_L
+    * 7: CRC_H
 
 ## Hardware
 
@@ -42,6 +80,7 @@ Amount  Part Type               Properties
   1     LD1117V33               Voltage: 3.3V; package 78xxl; chip LD1117VXX
   2     Electrolytic Capacitor  Capacitance: 10µF
   1     104Ω Resistor           Pin Spacing: 400 mil; tolerance: ±5%;
+==> replace the 104Ω with 120Ω
   2     150Ω Resistor           Pin Spacing: 400 mil; tolerance: ±5%;
   1     Camdenboss CTB0158-2    Pin Spacing: 0.2in (5.08mm); hole size: 2.7mm
   1     Male header – 1 pins    Pin Spacing: 0.1in (2.54mm)
@@ -49,17 +88,9 @@ Amount  Part Type               Properties
   1     Male header – 6 pins    Pin Spacing: 0.1in (2.54mm)
   1     18650                   LiPo Battery
 
-## Software
-
-* how to install
-  - build from ino file on github
-    * ????
-  - upload pre-built bin file from github
-    * ????
-
 ## Links
   - https://www.instructables.com/Inverter-Aurora-ABB-Power-One-Web-Monitor-WIM-With/
   - https://www.pcbway.com/project/shareproject/ABB__Power_One__Aurora_Web_Solar_Inverter_Monitor__WIM___server_PCB.html?from=mischianti723
   - https://www.wemos.cc/en/latest/d1_mini_shield/battery.html
   - https://github.com/xreef/Aurora_Web_Invert_Monitor/tree/master
-  - https://github.com/igrr/esptool-ck/releases
+  - https://mischianti.org/abb-aurora-pv-inverter-library-for-arduino-esp8266-and-esp32/
